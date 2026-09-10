@@ -1,130 +1,141 @@
-//HOOKS de la aplicacion
-import React, { useEffect } from 'react';
-import { Link, useNavigate} from 'react-router-dom';
-import { useForm } from '../../hooks/useForm';
-import { useAuthStore } from '../../hooks/useAuthStore';
-import Swal from 'sweetalert2';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// import { useHistory } from 'react-router-dom';
 
-import './LoginPage.css' 
 import { url_prefi } from '../../config/api';
-
-
-
+import { AuthLayout, AlertIcon, EyeIcon, EyeOffIcon, LockIcon, MailIcon } from '../components';
+import './AuthPages.css';
 
 const loginFormFields = {
-  loginEmail:    '',
+  loginEmail: '',
   loginPassword: '',
-}
-
+};
 
 export const LoginPage = () => {
-
   const navigate = useNavigate();
 
-  const { startLogin, errorMessage } = useAuthStore();       
-  const { loginEmail, loginPassword, onInputChange:onLoginInputChange } = useForm( loginFormFields );
-  
-  // const history = useHistory(); 
+  const [formState, setFormState] = useState(loginFormFields);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const loginSubmit = async ( event ) => {
+  const { loginEmail, loginPassword } = formState;
+
+  const onInputChange = ({ target }) => {
+    const { name, value } = target;
+    setFormState((prevState) => ({ ...prevState, [name]: value }));
+    if (error) setError('');
+  };
+
+  const loginSubmit = async (event) => {
     event.preventDefault();
 
-    // Verificar si ambos campos están vacíos
-    if (!loginEmail.trim() && !loginPassword.trim()) {
-      Swal.fire('Campos Vacíos', 'Por favor, ingrese su correo electrónico y contraseña.', 'warning');
+    if (!loginEmail.trim() || !loginPassword.trim()) {
+      setError('Por favor, ingrese su correo electrónico y contraseña.');
       return;
     }
 
+    setLoading(true);
+    setError('');
 
     try {
-      const url = url_prefi + '/auth'; 
-      
-      const body = {
-        email : loginEmail,
-        password : loginPassword 
-      }
-      
-      console.log(url);
-      const response = await axios.post(url, body);
-      
-      // Almacenar datos en localStorage
-      localStorage.setItem('jwt', response.data.token);
-      navigate('/inicio',{ replace: true}); 
-      console.log('Response:', response.data); 
-      
-    } catch (error) {
-      console.error('Error:', error); 
+      const { data } = await axios.post(`${url_prefi}/auth`, {
+        email: loginEmail.trim(),
+        password: loginPassword,
+      });
+
+      localStorage.setItem('jwt', data.token);
+      localStorage.setItem('jwt-init-date', new Date().getTime());
+
+      navigate('/', { replace: true });
+    } catch (err) {
+      setError(
+        err.response?.data?.msg ||
+          'No se pudo iniciar sesión. Verifique sus credenciales e intente nuevamente.'
+      );
+    } finally {
+      setLoading(false);
     }
+  };
 
-}; 
+  return (
+    <AuthLayout
+      title="Iniciar sesión"
+      subtitle="Ingrese sus credenciales para acceder al sistema"
+      footer="¿Problemas para ingresar? Contacte al administrador del sistema."
+    >
+      {error && (
+        <div className="alert alert-danger d-flex align-items-center gap-2 auth-alert" role="alert">
+          <AlertIcon />
+          <div>{error}</div>
+        </div>
+      )}
 
-useEffect(() => {
-  if ( errorMessage !== undefined ) {
-    Swal.fire('Error en la autenticación', errorMessage, 'error');
-  }
-}, [errorMessage]) 
-
-return (
-  <div className="container h-100">
-    <div className="row h-100 justify-content-center align-items-center">
-      <div className="col-md-6 col-sm-12">
-        <div className="mt-3 text-center">
-          {/* Logo de la empresa */}
-          <img
-            // src={`${url_prefi}/assets/logo.jpg`}
-            src="./1-logo.jpg"  
-            alt="Logo de la Empresa"
-            className="img-fluid mb-4"
-          />
-          <h3 className="form-title mb-4">Formulario Inicio de Sesión</h3>
-          <div className="card p-4">
-            <form onSubmit={loginSubmit}>
-              <div className="form-group">
-                <label htmlFor="usuario">Usuario:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="usuario"
-                  placeholder="Correo Electrónico"
-                  name="loginEmail"
-                  value={loginEmail}
-                  onChange={onLoginInputChange}
-                />
-              </div>
-
-              <div className="form-group mb-4">
-                <label htmlFor="contrasena">Contraseña:</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="contrasena"
-                  placeholder="Contraseña"
-                  name="loginPassword"
-                  value={loginPassword}
-                  onChange={onLoginInputChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <button type="submit" className="btn btn-primary btn-block">
-                  Iniciar Sesión
-                </button>
-              </div>
-
-              <div className="form-group">
-                <Link to="/register" className="btn btn-secondary btn-block">
-                  Registro Usuario
-                </Link>
-              </div>
-            </form>
+      <form onSubmit={loginSubmit} noValidate>
+        <div className="mb-3">
+          <label htmlFor="loginEmail" className="form-label">
+            Correo electrónico
+          </label>
+          <div className="input-group auth-input-group">
+            <span className="input-group-text">
+              <MailIcon />
+            </span>
+            <input
+              type="email"
+              className="form-control"
+              id="loginEmail"
+              name="loginEmail"
+              placeholder="usuario@frutyfenix.com"
+              autoComplete="username"
+              value={loginEmail}
+              onChange={onInputChange}
+              disabled={loading}
+            />
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-);
 
+        <div className="mb-4">
+          <label htmlFor="loginPassword" className="form-label">
+            Contraseña
+          </label>
+          <div className="input-group auth-input-group">
+            <span className="input-group-text">
+              <LockIcon />
+            </span>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className="form-control"
+              id="loginPassword"
+              name="loginPassword"
+              placeholder="Ingrese su contraseña"
+              autoComplete="current-password"
+              value={loginPassword}
+              onChange={onInputChange}
+              disabled={loading}
+            />
+            <button
+              type="button"
+              className="btn btn-outline-secondary auth-toggle"
+              onClick={() => setShowPassword((prevState) => !prevState)}
+              aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+              disabled={loading}
+            >
+              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+            </button>
+          </div>
+        </div>
 
+        <button type="submit" className="btn btn-success w-100 auth-submit" disabled={loading}>
+          {loading ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />
+              Verificando...
+            </>
+          ) : (
+            'Iniciar sesión'
+          )}
+        </button>
+      </form>
+    </AuthLayout>
+  );
 };

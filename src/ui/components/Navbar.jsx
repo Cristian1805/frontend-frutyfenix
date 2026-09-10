@@ -134,6 +134,22 @@ export const Navbar = () => {
                         REPORTES
                     </div>
                 </NavLink>
+
+                <NavLink
+                className={({ isActive }) => `nav-item nav-link ${isActive ? 'active' : ''}`}
+                to="/registro-usuario"
+                >
+                    <div className='d-flex align-items-center'>
+                    <img
+                        src="./iconos/avatar.png"
+                        alt="Logo"
+                        width="20"
+                        height="20"
+                        className="me-2" // Espaciado a la derecha del icono
+                    />
+                    REGISTRAR USUARIO
+                    </div>
+                </NavLink>
                 </div>
             </div>
 
