@@ -10,7 +10,8 @@ export const HeroesRoutes = () => {
     <>
         <Navbar />
 
-        <div className="container"> 
+        <main className="app-main">
+          <div className="app-content">
             <Routes>
                 <Route path="tropicales" element={<MarvelPage />} />
                 <Route path="importadas" element={<DcPage />} /> 
@@ -36,7 +37,8 @@ export const HeroesRoutes = () => {
                 <Route path="*" element={<Navigate to="/" replace />} />
                 
             </Routes>
-        </div>
+          </div>
+        </main>
 
 
     </>

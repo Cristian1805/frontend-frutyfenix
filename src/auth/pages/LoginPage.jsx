@@ -46,6 +46,7 @@ export const LoginPage = () => {
 
       localStorage.setItem('jwt', data.token);
       localStorage.setItem('jwt-init-date', new Date().getTime());
+      localStorage.setItem('user-name', data.name || 'Usuario autenticado');
 
       navigate('/', { replace: true });
     } catch (err) {
