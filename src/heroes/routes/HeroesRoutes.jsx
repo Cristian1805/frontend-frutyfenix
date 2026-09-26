@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Navbar } from '../../ui';
+import { RegisterPage } from '../../auth';
 import { DcPage, HeroPage, MarvelPage, ProductoForm, ProveedorForm, SearchPage, Reportes, InventarioSalida} from '../pages';
 import Inicio from '../pages/Inicio';
 // import AgregarProducto from '../pages/AgregarProducto';
@@ -9,7 +10,8 @@ export const HeroesRoutes = () => {
     <>
         <Navbar />
 
-        <div className="container"> 
+        <main className="app-main">
+          <div className="app-content">
             <Routes>
                 <Route path="tropicales" element={<MarvelPage />} />
                 <Route path="importadas" element={<DcPage />} /> 
@@ -22,6 +24,8 @@ export const HeroesRoutes = () => {
 
                 <Route path="proveedores" element={<ProveedorForm/>} />
 
+                <Route path="registro-usuario" element={<RegisterPage />} />
+
 
                 <Route path="salida-frm/:id" element={<InventarioSalida/>} />
 
@@ -30,10 +34,11 @@ export const HeroesRoutes = () => {
 
                 <Route path="/" element={<Inicio />} />
                 
-                {/* <Route path="/" element={<Navigate to="/inicio" />} /> */}
-
+                <Route path="*" element={<Navigate to="/" replace />} />
+                
             </Routes>
-        </div>
+          </div>
+        </main>
 
 
     </>

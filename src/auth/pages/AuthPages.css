@@ -1,0 +1,141 @@
+.auth-page {
+  min-height: 100vh;
+  background-color: #f4f6f5;
+}
+
+/* Panel de marca (lado izquierdo) */
+.auth-brand {
+  flex-direction: column;
+  justify-content: center;
+  padding: 3.5rem;
+  color: #fff;
+  background: linear-gradient(160deg, rgba(18, 58, 30, 0.93), rgba(36, 101, 53, 0.88)),
+    url('/carrusel/2img.jpg') center / cover no-repeat;
+}
+
+.auth-brand-content {
+  max-width: 520px;
+}
+
+.auth-brand-logo {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.65);
+  margin-bottom: 1.5rem;
+}
+
+.auth-brand-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.auth-brand-text {
+  font-size: 1.05rem;
+  opacity: 0.92;
+  margin-bottom: 1.5rem;
+}
+
+.auth-brand-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.auth-brand-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.95;
+}
+
+.auth-brand-list li::before {
+  content: '\2713';
+  color: #b8e6c1;
+  font-weight: 700;
+}
+
+/* Panel de formulario (lado derecho) */
+.auth-form-panel {
+  padding: 2.5rem 1.5rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+}
+
+.auth-mobile-logo {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.auth-title {
+  font-weight: 700;
+  color: #1f2d24;
+  margin-bottom: 0.35rem;
+}
+
+.auth-subtitle {
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+.auth-card .form-label {
+  font-weight: 600;
+  color: #34463a;
+}
+
+.auth-input-group .input-group-text,
+.auth-input-group .form-control,
+.auth-input-group .auth-toggle {
+  border-color: #ced4da;
+  background-color: #fff;
+}
+
+.auth-input-group .input-group-text {
+  color: #6c757d;
+  border-right: 0;
+}
+
+.auth-input-group .form-control {
+  border-left: 0;
+}
+
+.auth-input-group .form-control:focus {
+  box-shadow: none;
+}
+
+.auth-input-group:focus-within {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 0.25rem rgba(36, 101, 53, 0.15);
+}
+
+.auth-toggle {
+  border-left: 0;
+  color: #6c757d;
+}
+
+.auth-toggle:hover {
+  color: #246535;
+}
+
+.auth-submit {
+  padding: 0.7rem;
+  font-weight: 600;
+}
+
+.auth-footer {
+  color: #8a938d;
+  font-size: 0.875rem;
+}
+
+.auth-alert svg {
+  flex-shrink: 0;
+}
